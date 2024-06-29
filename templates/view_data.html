@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stored Data</title>
+</head>
+<body>
+    <h1>Stored Questions and Answers</h1>
+    <div>
+        {% for entry in data %}
+            <h2>Paragraph:</h2>
+            <p>{{ entry.paragraph }}</p>
+            <h3>Q&A Pairs:</h3>
+            <ul>
+                {% for qa in entry.qa_pairs %}
+                    <li>
+                        <strong>Question:</strong> {{ qa.question }}<br>
+                        <strong>Answer:</strong> {{ qa.answer }}<br>
+                        <strong>Context:</strong> {{ qa.context }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <hr>
+        {% endfor %}
+    </div>
+    <a href="{{ url_for('index') }}">Go Back</a>
+</body>
+</html>

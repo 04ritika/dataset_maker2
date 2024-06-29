@@ -1,0 +1,57 @@
+.qa-pair {
+  background-color: #f5f5f5; /* Light gray background */
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px; /* Inner padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin-bottom: 15px; /* Add spacing between QA pairs */
+  position: relative; /* Needed for optional timestamp placement */
+}
+
+.qa-pair:before {
+  content: ""; /* Add a pseudo-element for the chat bubble tail */
+  position: absolute;
+  top: 0;
+  left: -10px; /* Adjust left position based on border radius */
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent; /* Left border for tail */
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #f5f5f5; /* Bottom border connects to chat box */
+}
+
+.qa-form > div:first-child { /* Style paragraph section */
+  margin-bottom: 15px; /* Add spacing between paragraph and QA pairs */
+  background-color: #eee; /* Light gray background for paragraph block */
+  border-radius: 5px; /* Rounded corners for paragraph block */
+  padding: 10px; /* Inner padding for paragraph block */
+  overflow-x: auto; /* Enable horizontal scrolling for long paragraphs */
+  white-space: pre-wrap; /* Preserve line breaks in the paragraph */
+  font-family: monospace; /* Use a monospaced font for code-like appearance */
+}
+
+.qa-pair div:first-child { /* Style question section */
+  margin-bottom: 5px; /* Add some space between question and answer */
+}
+
+.qa-pair div label {
+  display: inline-block; /* Align labels with inputs */
+  width: 80px; /* Fix label width to prevent overlapping */
+  color: #333; /* Match text color (e.g., dark gray) */
+}
+
+.qa-pair div input[type="text"] {
+  width: calc(100% - 80px); /* Set input width based on label width */
+  padding: 5px; /* Add some padding for inputs */
+  border: 1px solid #ccc; /* Light border for inputs */
+  color: #333; /* Match text color (e.g., dark gray) */
+}
+
+.qa-pair hr {
+  margin: 10px 0; /* Adjust margin for the horizontal line */
+  border-top: 1px dotted rgba(0, 0, 0, 0.1); /* Dotted line separator */
+}
+
+.highlight {
+  background-color: #ffff99; /* Yellow background for highlighting */
+  font-weight: bold; /* Bold text for highlighting */
+}

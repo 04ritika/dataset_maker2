@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Questions and Answers</title>
+</head>
+<body>
+    <h1>Input Questions and Answers</h1>
+    <form method="post" action="{{ url_for('index', index=index) }}">
+        <div>
+            <label for="paragraph">Paragraph:</label>
+            <textarea id="paragraph" name="paragraph" rows="4" cols="50" readonly>{{ paragraph }}</textarea>
+        </div>
+        <div>
+            <label for="question">Question:</label>
+            <input type="text" id="question" name="question" required>
+        </div>
+        <div>
+            <label for="answer">Answer:</label>
+            <input type="text" id="answer" name="answer" required>
+        </div>
+        <input type="hidden" name="paragraph_id" value="{{ paragraph_id }}">
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

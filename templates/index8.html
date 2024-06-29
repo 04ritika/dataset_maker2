@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles2.css') }}">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Questions and Answers</title>
+    <style>
+        .highlight {
+            background-color: #ffff99; /* Yellow background for highlighting */
+            font-weight: bold; /* Bold text for highlighting */
+        }
+    </style>
+    <script>
+        function addQAField(question = '', answer = '') {
+            var container = document.getElementById("qa-container");
+            var div = document.createElement("div");
+            div.classList.add("qa-pair");
+            div.innerHTML = `
+                <div>
+                    <label for="question">Question:</label>
+                    <input type="text" name="question" value="${question}" required>
+                </div>
+                <div>
+                    <label for="answer">Answer:</label>
+                    <input type="text" name="answer" value="${answer}" required oninput="highlightMatchingText(this)">
+                </div>
+                <button type="button" onclick="removeQAField(this)">Remove</button>
+                <button type="button" onclick="editQAField(this)">Edit</button>
+                <button type="button" onclick="translateQAField(this)">Translate</button>
+                <hr>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeQAField(button) {
+            var container = document.getElementById("qa-container");
+            container.removeChild(button.parentElement);
+        }
+
+        function prepareFormData() {
+            var form = document.getElementById("qa-form");
+            var qaPairs = [];
+            var qaDivs = document.getElementsByClassName("qa-pair");
+            for (var i = 0; i < qaDivs.length; i++) {
+                var question = qaDivs[i].querySelector('input[name="question"]').value;
+                var answer = qaDivs[i].querySelector('input[name="answer"]').value;
+                qaPairs.push({ question: question, answer: answer });
+            }
+            var qaPairsInput = document.createElement("input");
+            qaPairsInput.type = "hidden";
+            qaPairsInput.name = "qa_pairs";
+            qaPairsInput.value = JSON.stringify(qaPairs);
+            form.appendChild(qaPairsInput);
+        }
+
+        function editQAField(button) {
+            var div = button.parentElement;
+            var question = div.querySelector('input[name="question"]').value;
+            var answer = div.querySelector('input[name="answer"]').value;
+            div.innerHTML = `
+                <div>
+                    <label for="question">Question:</label>
+                    <input type="text" name="question" value="${question}" required>
+                </div>
+                <div>
+                    <label for="answer">Answer:</label>
+                    <input type="text" name="answer" value="${answer}" required oninput="highlightMatchingText(this)">
+                </div>
+                <button type="button" onclick="removeQAField(this)">Remove</button>
+                <button type="button" onclick="editQAField(this)">Edit</button>
+                <button type="button" onclick="translateQAField(this)">Translate</button>
+                <hr>
+            `;
+        }
+
+        function translateQAField(button) {
+            var div = button.parentElement;
+            var question = div.querySelector('input[name="question"]').value;
+            var answer = div.querySelector('input[name="answer"]').value;
+            var translateUrl = `https://translate.google.co.in/?hl=hi&sl=hi&tl=en&text=${encodeURIComponent(question + '\n' + answer)}&op=translate`;
+            window.open(translateUrl, '_blank');
+        }
+
+        function highlightMatchingText(input) {
+            var paragraph = document.getElementById("paragraph").value;
+            var answer = input.value;
+
+            // Remove previous highlights
+            var highlightedParagraph = paragraph.replaceAll('<span class="highlight">', '').replaceAll('</span>', '');
+
+            if (paragraph.includes(answer)) {
+                // Highlight matching text
+                var regex = new RegExp(answer, 'gi');
+                highlightedParagraph = highlightedParagraph.replace(regex, '<span class="highlight">$&</span>');
+            }
+
+            document.getElementById("highlighted-paragraph").innerHTML = highlightedParagraph;
+        }
+
+        function goToChatGPT() {
+            var chatGPTUrl = "https://www.chatgpt.com";
+            window.open(chatGPTUrl, '_blank');
+        }
+    </script>
+</head>
+<body>
+    <h1>Input Questions and Answers</h1>
+    
+    <p>Current Index: {{ index }}</p>
+    <p>Total Paragraphs: {{ num_paragraphs }}</p>
+
+    <form id="qa-form" method="post" action="{{ url_for('index', index=index) }}" onsubmit="prepareFormData()">
+        <div>
+            <label for="paragraph">Paragraph:</label>
+            <textarea id="paragraph" name="paragraph" rows="4" cols="50" readonly>{{ paragraph }}</textarea>
+        </div>
+        <div id="qa-container">
+            <div class="qa-pair">
+                <div>
+                    <label for="question">Question:</label>
+                    <input type="text" name="question" required>
+                </div>
+                <div>
+                    <label for="answer">Answer:</label>
+                    <input type="text" name="answer" required oninput="highlightMatchingText(this)">
+                </div>
+                <button type="button" onclick="removeQAField(this)">Remove</button>
+                <button type="button" onclick="editQAField(this)">Edit</button>
+                <button type="button" onclick="translateQAField(this)">Translate</button>
+                <hr>
+            </div>
+        </div>
+        <button type="button" onclick="addQAField()">Add Another Question</button>
+        <button type="button" onclick="goToChatGPT()">Go to ChatGPT</button> <!-- Added button to go to ChatGPT -->
+        <input type="hidden" name="paragraph_id" value="{{ paragraph_id }}">
+        <input type="submit" value="Submit">
+    </form>
+
+    <br>
+    <div id="highlighted-paragraph"></div> <!-- Display highlighted paragraph -->
+    <a href="{{ url_for('view_data') }}">View Stored Data</a>
+</body>
+</html>
